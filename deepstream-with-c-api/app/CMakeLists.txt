@@ -1,0 +1,3 @@
+add_executable(ds_usb_cam DS_usb_cam.cpp)
+target_compile_features(ds_usb_cam PUBLIC cxx_std_17)
+target_link_libraries(ds_usb_cam PUBLIC deep_stream)
