@@ -1,0 +1,50 @@
+pipeline:
+v4l2src  -> capsfilter1 ->
+if x86:
+capsfilter1 -> nvvidconv1 -> nvvidconv2
+if arrch64:
+capsfilter1 -> nvvidconv2 -> capsfilter
+
+GstElement *nvvidconv2;
+nvvidconv2 = gst_element_factory_make ("nvvideoconvert", "nvvidconv2");
+
+GstCapsFeatures *feature = NULL;
+
+// for x86
+GstElement *nvvidconv1 = NULL;
+nvvidconv1 = gst_element_factory_make ("videoconvert", "nvvidconv1");
+Set Object:
+1. set device for v4l2
+g_object_set(G_OBJECT (v4l2src), "device", "/dev/video0",NULL);
+2. set object for cap_filter1
+GstCaps *caps1 = gst_caps_new_simple ("video/x-raw",
+          "width", G_TYPE_INT, width, "height", G_TYPE_INT,
+          height, "framerate", GST_TYPE_FRACTION,
+          source_fps_n, source_fps_d, NULL);
+
+3. set object for cap_filter
+GstCaps *cap	s = gst_caps_new_simple ("video/x-raw", "format", G_TYPE_STRING, "NV12",
+      "width", G_TYPE_INT, width, "height", G_TYPE_INT,
+      height, "framerate", GST_TYPE_FRACTION,
+      source_fps_n, source_fps_d, NULL);
+4. Create feature 
+feature = gst_caps_features_new ("memory:NVMM", NULL);
+
+5. Set feature
+gst_caps_set_features (caps, 0, feature);
+
+6. Set object for capsfilter from caps
+g_object_set (G_OBJECT (bin->cap_filter), "caps", caps, NULL);
+g_object_set (G_OBJECT (bin->cap_filter1), "caps", caps1, NULL);
+7. Set object for nvvidconv2
+    g_object_set (G_OBJECT (nvvidconv2), "gpu-id", gpu_id,
+        "nvbuf-memory-type", nvbuf_memory_type, NULL);
+Bin add many
+if x86
+gst_bin_add_many (GST_BIN (bin->bin), bin->src_elem, bin->cap_filter1,
+  nvvidconv1, nvvidconv2, bin->cap_filter, NULL);
+if arrch64
+gst_bin_add_many (GST_BIN (bin->bin), bin->src_elem, bin->cap_filter1,
+  nvvidconv2, bin->cap_filter, NULL);
+
+
