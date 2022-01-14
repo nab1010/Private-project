@@ -8,9 +8,9 @@
 
 #include "gstnvdsmeta.h"
 //#include "gstnvstreammeta.h"
-// #ifndef PLATFORM_TEGRA
-// #include "gst-nvmessage.h"
-// #endif
+#ifndef PLATFORM_TEGRA
+#include "gst-nvmessage.h"
+#endif
 
 #define MAX_DISPLAY_LEN 64
 
@@ -21,10 +21,10 @@
  * 1: GPU mode (for Tesla only)
  * 2: HW mode (For Jetson only)
  */
-#define OSD_PROCESS_MODE 0
+#define OSD_PROCESS_MODE 1
 
 /* By default, OSD will not display text. To display text, change this to 1 */
-#define OSD_DISPLAY_TEXT 0
+#define OSD_DISPLAY_TEXT 1
 
 /* The muxer output resolution must be set if the input streams will be of
  * different resolution. The muxer will scale all the input frames to this

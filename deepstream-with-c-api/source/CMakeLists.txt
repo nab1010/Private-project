@@ -9,8 +9,9 @@ list(APPEND DEPS "${DEEP_STREAM_LIBS}/libnvdsgst_meta.so")
 list(APPEND DEPS "${DEEP_STREAM_LIBS}/libnvds_meta.so")
 list(APPEND DEPS "${DEEP_STREAM_LIBS}/libnvbufsurface.so")
 list(APPEND DEPS "${DEEP_STREAM_LIBS}/libnvbufsurftransform.so")
+list(APPEND DEPS "${DEEP_STREAM_LIBS}/libnvdsgst_helper.so")
 
-list(APPEND INCLUDE_DIRS "${DEEP_STREAM_LIBS}/../sources/includes/")
+list(APPEND INCLUDE_DIRS "${DEEP_STREAM_LIBS}/../sources/includes")
 
 file(GLOB_RECURSE HEADER_LIST "${PROJECT_SOURCE_DIR}/include/*[.hpp, .h]")
 file(GLOB_RECURSE SOURCE_LIST "${PROJECT_SOURCE_DIR}/source/*cpp")
